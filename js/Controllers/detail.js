@@ -1,4 +1,36 @@
-﻿app.controller("detail", function ($scope, $rootScope) {
-    $scope.DetailHTML = "";
+﻿app.controller("detail", function ($scope, $rootScope, $compile,TemplateService) {
+    $scope.HTML = "";
+
+    $scope.Selected = {};
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // main entry point
+
+    $rootScope.$on('Process', function () {
+        CreateHTML();
+    });
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // templates
+
+    function CreateHTML() {
+        TemplateService.LoadAndRender('detailtemplate.html', $rootScope.TemplateData)
+        .then(function (data) {
+            $scope.HTML = data;
+            CreatePreview();
+        });
+    };
+
+    function CreatePreview() {
+        //add some dummy data
+        $scope.Selected = JSON.parse($rootScope.JSON);
+
+        //let angular know about our new html and add it to the DOM
+        //TODO work out a way to not hardcode the dom element in
+        $('#detailpreview').html($compile($scope.HTML)($scope));
+    };
+
+
+
 
 });

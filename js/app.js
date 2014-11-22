@@ -6,6 +6,7 @@ app.run(function ($rootScope) {
     $rootScope.Headers = [];
 
     $rootScope.fields = { Name: '' };
+    $rootScope.TemplateData = {};
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

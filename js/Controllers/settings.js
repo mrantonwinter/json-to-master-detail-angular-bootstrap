@@ -7,16 +7,32 @@
         var keys = _.keys(JSON.parse($rootScope.JSON));
 
         _.each(keys, function (key) {
-            var type =CalcType(key);
-            var humanised = CalcName(key,type);
-            var row = { key: key, humanised:humanised, type: type, inmaster: true };
+            var type = CalcType(key);
+            var humanised = CalcName(key, type);
+            var row = { key: key, humanised: humanised, type: type, inmaster: true };
             $rootScope.Keys.push(row);
         });
+
 
         $scope.Process();
     });
 
-    $scope.Process = function(){
+    function SetupTemplateData() {
+        //get the list of columns for our master table 
+        var columns = _.where($rootScope.Keys, { inmaster: true });
+
+        //setup our data
+        $rootScope.TemplateData = {
+            name: $rootScope.fields.Name,
+            keys: _.pluck(columns, 'key'),
+            headers: _.pluck(columns, 'humanised'),
+            elements: columns
+        };
+    }
+
+    $scope.Process = function () {
+        SetupTemplateData();
+
         $rootScope.$broadcast('Process');
     };
 
@@ -47,6 +63,6 @@
 
         //return _(key).humanize();
         return key;
-        
+
     };
 });

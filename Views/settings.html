@@ -1,21 +1,27 @@
-﻿<div ng-controller="settings">
-    <h2>Config</h2>
-    <table class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-            <tr>
-                <td>Key</td>
-                <td>Display name</td>
-                <td>Type</td>
-                <td>In master?</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="key in Keys">
-                <td>{{key.key}}</td>
-                <td><input ng-model="key.humanised" /></td>
-                <td><select ng-model="key.type" ng-options="type for type in $parent.TypeOptions"></select></td>
-                <td><input type="checkbox" ng-checked="key.master" /></td>
-            </tr>
-        </tbody>
-    </table>
+﻿<div class="well" ng-show="Go">
+    <div ng-controller="settings">
+        <h2>Config</h2>
+        <div>
+            <table class="table table-striped table-bordered table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <td>Key</td>
+                        <td>Display name</td>
+                        <td>Type</td>
+                        <td>In master?</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="key in Keys">
+                        <td>{{key.key}}</td>
+                        <td><input ng-model="key.humanised" /></td>
+                        <td><select ng-model="key.type" ng-options="type for type in $parent.TypeOptions"></select></td>
+                        <td><input type="checkbox" ng-model="key.inmaster" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+                    <button class="btn " ng-click="Process()">Recalculate</button>
+    </div>
 </div>

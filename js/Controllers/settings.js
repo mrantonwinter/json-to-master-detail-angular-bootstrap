@@ -1,18 +1,24 @@
 ﻿app.controller("settings", function ($scope, $rootScope) {
 
-    $scope.Keys = [];
 
     $rootScope.$on('Go', function () {
+        $rootScope.Keys = [];
+
         var keys = _.keys(JSON.parse($rootScope.JSON));
 
         _.each(keys, function (key) {
             var type =CalcType(key);
             var humanised = CalcName(key,type);
-            var row = { key: key, humanised:humanised, type: type, master: true };
-            $scope.Keys.push(row);
+            var row = { key: key, humanised:humanised, type: type, inmaster: true };
+            $rootScope.Keys.push(row);
         });
+
+        $scope.Process();
     });
 
+    $scope.Process = function(){
+        $rootScope.$broadcast('Process');
+    };
 
     $scope.TypeOptions = ["label", "input", "email", "textarea", "checkbox", "select", "datepicker"];
 

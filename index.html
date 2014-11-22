@@ -25,33 +25,103 @@
     </header>
 
 
-    <div class="container" >
+    <div class="container">
 
         <!--user input of json-->
         <div class="row">
             <div class="col-xs-12">
-                <div ng-include="'/Views/source.html'" ></div>
+                <div class="well ">
+                    <form name="JSONForm" class="form-horizontal  " ng-controller="source">
+                        <fieldset>
+                            <!--Object name-->
+                            <div class="form-group" ng-class="{'has-warning':fields.Name==''}">
+                                <div class="col-md-12 ">
+                                    <input ng-model="fields.Name" class="form-control" placeholder="your objects name" required></input>
+                                </div>
+                            </div>
+                            <!-- JSON Textarea -->
+                            <div class="form-group" ng-class="{'has-warning':JSON=='' || JSON==null}">
+                                <div class="col-md-12 ">
+                                    <textarea ng-model="JSON" class="form-control MD resizevertical" id="jsoninput" name="jsoninput" rows="10" placeholder="paste JSON here" required></textarea>
+                                </div>
+                            </div>
+                            <!-- Go Button -->
+                            <div class="form-group">
+                                <div class="col-md-12 ">
+                                    <button type="submit" class="btn btn-primary  pull-right col-xs-4" ng-click="Go($event)" ng-disabled="JSONForm.$invalid">Go</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         </div>
 
         <!--JSON key settings-->
         <div class="row">
             <div class="col-xs-12">
-                <div ng-include="'/Views/settings.html'"></div>
+                <div class="well" ng-show="Go">
+                    <div ng-controller="settings">
+                        <h2>Config</h2>
+                        <div>
+                            <table class="table table-striped table-bordered table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>Key</td>
+                                        <td>Display name</td>
+                                        <td>Type</td>
+                                        <td>In master?</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="key in Keys">
+                                        <td>{{key.key}}</td>
+                                        <td><input ng-model="key.humanised" /></td>
+                                        <td><select ng-model="key.type" ng-options="type for type in $parent.TypeOptions"></select></td>
+                                        <td><input type="checkbox" ng-model="key.inmaster" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button class="btn " ng-click="Process()">Recalculate</button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!--Master -->
         <div class="row">
             <div class="col-xs-12">
-                <div ng-include="'/Views/master.html'"></div>
+                <div ng-controller="master" ng-show="Go">
+                    <hr />
+                    <h2>Master preview </h2>
+                    <div id="masterpreview"></div>
+                    <hr />
+                    <h2>Master code </h2>
+                    <h4>Master HTML</h4>
+                    <pre>{{HTML}}</pre>
+                    <hr />
+                    <h4>Controller</h4>
+                    <pre>{{Controller}}</pre>
+                    <hr />
+                    <h4>Service</h4>
+                    <pre>{{Service}}</pre>
+                </div>
             </div>
         </div>
 
         <!--detail -->
         <div class="row">
             <div class="col-xs-12">
-                <div ng-include="'/Views/detail.html'"></div>
+                <div ng-controller="detail" ng-show="Go">
+                    <h2>Detail preview </h2>
+                    <div id="detailpreview"></div>
+                    <hr />
+                    <h2>Detail code </h2>
+                    <h4>Detail HTML</h4>
+                    <pre>{{HTML}}</pre>
+                </div>
             </div>
         </div>
 

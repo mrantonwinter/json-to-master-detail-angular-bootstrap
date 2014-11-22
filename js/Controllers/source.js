@@ -1,5 +1,4 @@
 ﻿app.controller("source", function ($scope, $rootScope) {
-    $scope.Name = '';
     $rootScope.JSON = '{"id":1,"name":"john smith","email":"john@gmail.com", "dob":"5/11/1968","groupID":10}';//example json
 
     $scope.Go = function ($event) {

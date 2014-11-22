@@ -5,6 +5,9 @@ app.run(function ($rootScope) {
     $rootScope.Keys = [];
     $rootScope.Headers = [];
 
+    $rootScope.fields = { Name: '' };
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
 

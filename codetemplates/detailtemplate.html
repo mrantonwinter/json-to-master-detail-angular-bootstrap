@@ -1,10 +1,10 @@
 ﻿<form class="form-horizontal">
     <fieldset>
 
-        {{#each elements}}
+        {{#each allElements}}
         <div class="form-group">
-            <label class="col-md-4 control-label" for="{{this.humanised}}textinput">{{this.humanised}}</label>
-            <div class="col-md-4">
+            <label class="col-md-3 control-label" for="{{this.humanised}}textinput">{{this.humanised}}</label>
+            <div class="col-md-9">
                 <input id="{{this.humanised}}textinput" type="text" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}">
             </div>
         </div>

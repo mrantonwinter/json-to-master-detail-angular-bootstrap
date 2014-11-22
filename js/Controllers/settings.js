@@ -1,9 +1,13 @@
 ﻿app.controller("settings", function ($scope, $rootScope) {
 
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // main entry point
+
     $rootScope.$on('Go', function () {
         $rootScope.Keys = [];
 
+        //create a list of all the data elements, their types and if to show them or not in the master table
         var keys = _.keys(JSON.parse($rootScope.JSON));
 
         _.each(keys, function (key) {
@@ -13,9 +17,17 @@
             $rootScope.Keys.push(row);
         });
 
-
         $scope.Process();
     });
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    // get data ready and let everyone know to run
+    $scope.Process = function () {
+        SetupTemplateData();
+
+        $rootScope.$broadcast('Process');
+    };
 
     function SetupTemplateData() {
         //get the list of columns for our master table 
@@ -26,18 +38,18 @@
             name: $rootScope.fields.Name,
             keys: _.pluck(columns, 'key'),
             headers: _.pluck(columns, 'humanised'),
-            elements: columns
+            elements: columns,
+            allElements: $rootScope.Keys
         };
     }
 
-    $scope.Process = function () {
-        SetupTemplateData();
 
-        $rootScope.$broadcast('Process');
-    };
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // helper functions
 
     $scope.TypeOptions = ["label", "input", "email", "textarea", "checkbox", "select", "datepicker"];
 
+    // try to infer what type of data we have
     function CalcType(key) {
         key = key.toLowerCase();
         if (_.str.include(key, "date") || key == "dob")
@@ -59,6 +71,7 @@
         return "input";
     };
 
+    //calculate a human friendly name
     function CalcName(key, type) {
 
         //return _(key).humanize();

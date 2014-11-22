@@ -11,7 +11,6 @@
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    // templates
 
     function CreateHTML() {
         TemplateService.LoadAndRender('detailtemplate.html', $rootScope.TemplateData)

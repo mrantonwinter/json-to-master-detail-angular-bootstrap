@@ -1,0 +1,29 @@
+﻿<form name="JSONForm" class="form-horizontal " ng-controller="source">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Generate an Angular/Bootstrap Master-Detail view for a JSON object</legend>
+
+        <!--Object name-->
+        <div class="form-group" ng-class="{'has-warning':Name==''}">
+            <div class="col-md-12 ">
+                <input ng-model="Name" class="form-control" placeholder="your objects name" required></input>
+            </div>
+        </div>
+
+        <!-- JSON Textarea -->
+        <div class="form-group" ng-class="{'has-warning':JSON=='' || JSON==null}">
+            <div class="col-md-12 ">
+                <textarea ng-model="JSON" class="form-control MD resizevertical" id="jsoninput" name="jsoninput" rows="10" placeholder="paste JSON here" required></textarea>
+            </div>
+        </div>
+
+        <!-- Go Button -->
+        <div class="form-group">
+            <div class="col-md-12 ">
+                <button type="submit" class="btn btn-success  pull-right col-xs-4" ng-click="Go($event)" ng-disabled="JSONForm.$invalid">Go</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>

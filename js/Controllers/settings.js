@@ -8,7 +8,7 @@
         $rootScope.Keys = [];
 
         //create a list of all the data elements, their types and if to show them or not in the master table
-        var keys = _.keys(JSON.parse($rootScope.JSON));
+        var keys = _.keys(JSON.parse($rootScope.fields.JSON));
 
         _.each(keys, function (key) {
             var type = CalcType(key);

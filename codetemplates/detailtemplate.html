@@ -3,9 +3,47 @@
 
         {{#each allElements}}
         <div class="form-group">
-            <label class="col-md-3 control-label" for="{{this.humanised}}textinput">{{this.humanised}}</label>
-            <div class="col-md-9">
-                <input id="{{this.humanised}}textinput" type="text" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}">
+            <label class="col-md-2 control-label" for="{{this.humanised}}{{this.type}}input">{{this.humanised}}</label>
+            <div class="col-md-10">
+                {{#compare this.type "label"}}
+                <label id="{{this.humanised}}labelinput" class="control-label">\{{ Selected.{{this.key}} }}</label>
+                {{/compare}}
+
+                {{#compare this.type "input"}}
+                <input id="{{this.humanised}}inputinput" type="text" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}">
+                {{/compare}}
+
+                {{#compare this.type "email"}}
+                <input id="{{this.humanised}}emailinput" type="email" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}">
+                {{/compare}}
+
+                {{#compare this.type "textarea"}}
+                <textarea id="{{this.humanised}}textareainput" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}" />
+                {{/compare}}
+
+                {{#compare this.type "checkbox"}}
+                <div class="checkbox">
+                    <label>
+                        <input id="{{this.humanised}}checkboxinput" type="checkbox" ng-model="Selected.{{this.key}}">
+                    </label>
+                </div>
+                {{/compare}}
+
+                {{#compare this.type "datepicker"}}
+                <p class="input-group">
+                    <input type="text" class="form-control" ng-model="Selected.{{this.key}}" is-open="opened" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+                {{/compare}}
+
+                {{#compare this.type "select"}}
+                <select id="{{this.humanised}}selectinput" class="form-control " ng-model="Selected.{{this.key}}"></select>
+                {{/compare}}
+
+
+
             </div>
         </div>
         {{/each}}

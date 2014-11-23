@@ -31,7 +31,7 @@
         //add some dummy data
         $scope.Model.rows = [];
         for (var i = 0; i < 5; i++)
-            $scope.Model.rows.push(JSON.parse($rootScope.JSON));
+            $scope.Model.rows.push(JSON.parse($rootScope.fields.JSON));
 
         //let angular know about our new html and add it to the DOM
         //TODO work out a way to not hardcode the dom element in

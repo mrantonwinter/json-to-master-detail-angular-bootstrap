@@ -22,7 +22,7 @@
 
     function CreatePreview() {
         //add some dummy data
-        $scope.Selected = JSON.parse($rootScope.JSON);
+        $scope.Selected = JSON.parse($rootScope.fields.JSON);
 
         //let angular know about our new html and add it to the DOM
         //TODO work out a way to not hardcode the dom element in

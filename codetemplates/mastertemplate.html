@@ -7,7 +7,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="row in Model.rows">
+        <tr ng-repeat="row in Model.rows" ng-class="{info: row==Selected}" ng-click="Select(row)">
             {{#each keys}}
             <td>\{{ row.{{this}} }}</td>
             {{/each}}

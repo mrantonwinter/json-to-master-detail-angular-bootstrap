@@ -7,4 +7,8 @@
     $scope.Init = function(){
         {{name}}Service.Init();
     };
+
+    $scope.Select = function (selected) {
+        $scope.Selected = selected;
+    }
 });

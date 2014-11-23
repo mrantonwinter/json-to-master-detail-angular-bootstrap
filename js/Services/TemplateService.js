@@ -5,7 +5,7 @@
         LoadAndRender: function (templatename, data) {
             var defer = $q.defer();
 
-            $http.get('/codetemplates/' + templatename).
+            $http.get('codetemplates/' + templatename).
               success(function (template) {
                   defer.resolve(service.RenderTemplate(template, data));
               }).

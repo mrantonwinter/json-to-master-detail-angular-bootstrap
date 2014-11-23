@@ -1,0 +1,24 @@
+﻿<div class="well ">
+    <form name="JSONForm" class="form-horizontal  " ng-controller="source">
+        <fieldset>
+            <!--Object name-->
+            <div class="form-group" ng-class="{'has-warning':fields.Name==''}">
+                <div class="col-md-12 ">
+                    <input ng-model="fields.Name" class="form-control" placeholder="your objects name" required></input>
+                </div>
+            </div>
+            <!-- JSON Textarea -->
+            <div class="form-group" ng-class="{'has-warning':fields.JSON=='' || fields.JSON==null}">
+                <div class="col-md-12 ">
+                    <textarea ng-model="fields.JSON" class="form-control MD resizevertical" id="jsoninput" name="jsoninput" rows="10" placeholder="paste JSON here" required></textarea>
+                </div>
+            </div>
+            <!-- Go Button -->
+            <div class="form-group">
+                <div class="col-md-12 ">
+                    <button type="submit" class="btn btn-primary  pull-right col-xs-4" ng-click="Go($event)" ng-disabled="JSONForm.$invalid">Go</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

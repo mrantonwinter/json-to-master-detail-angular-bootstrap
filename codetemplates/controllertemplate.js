@@ -2,6 +2,8 @@
 
     $scope.Model = {{name}}Service.Model;
 
+    $scope.Selected = null;
+
     $scope.Init = function(){
         {{name}}Service.Init();
     };

@@ -9,9 +9,10 @@
 
         //create a list of all the data elements, their types and if to show them or not in the master table
         var keys = _.keys(JSON.parse($rootScope.fields.JSON));
+        var element = JSON.parse($rootScope.fields.JSON);
 
         _.each(keys, function (key) {
-            var type = CalcType(key);
+            var type = CalcType(key, element[key]);
             var humanised = CalcName(key, type);
             var row = { key: key, humanised: humanised, type: type, inmaster: true };
             $rootScope.Keys.push(row);
@@ -50,7 +51,7 @@
     $scope.TypeOptions = ["label", "input", "email", "textarea", "checkbox", "select", "datepicker"];
 
     // try to infer what type of data we have
-    function CalcType(key) {
+    function CalcType(key, value) {
         key = key.toLowerCase();
         if (_.str.include(key, "date") || key == "dob")
             return "datepicker";
@@ -67,6 +68,8 @@
         if (key == "email")
             return "email";
 
+        if (value === true || value === false)
+            return "checkbox";
 
         return "input";
     };

@@ -1,0 +1,346 @@
+aws cloudformation create-stack --stack-name {{name}} --template-body file://Launch-{{name}}.json
+
+
+Launch-{{name}}.json
+
+
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "{{description}}",
+  "Parameters": {
+    "environment": {
+      "Description": "The name of the environment you want to deploy to.",
+      "Type": "String",
+      "AllowedValues": [
+        "bedev",
+        "wgtdev",
+        "wgtint",
+        "wgtuat"
+      ],
+      "Default": "bedev"
+    },
+    "ami": {
+      "Description": "The AMI of the machine you want to launch",
+      "Type": "String",
+      "MinLength": "12",
+      "MaxLength": "12",
+      "AllowedPattern": "ami-[a-f0-9]{8}",
+      "Default": "ami-89b7deb3"
+    },
+    "instanceType": {
+      "Description": "The type of the EC2 instance you want",
+      "Type": "String",
+      "AllowedValues": [
+        "t2.micro",
+        "t2.medium",
+        "m3.medium"
+      ],
+      "Default": "m3.medium"
+    },
+    "ELBSecurityGroup": {
+      "Description": "The name of the security group for the ELB",
+      "Type": "String",
+      "Default": "sg-5c16c739"
+    },
+    "InstanceSecurityGroup": {
+      "Description": "The name of the security group for the Instance",
+      "Type": "String",
+      "Default": "sg-5c16c739"
+    },
+    "{{name}}Profile": {
+      "Description": "The name of the security group for the ELB",
+      "Type": "String",
+      "Default": "dev-build"
+    }
+  },
+  "Mappings": {
+    "VpcMap": {
+      "bedev": {
+        "vpc": "vpc-fc739999",
+        "backendSubnets": [
+          "subnet-52e20825",
+          "subnet-0836fb6d"
+        ],
+        "backendElbSubnets": [
+          "subnet-52e20825",
+          "subnet-0836fb6d"
+        ],
+        "ccSubnets": [
+          "subnet-25e20852",
+          "subnet-f036fb95"
+        ],
+        "frontendSubnets": [
+          "subnet-a8ed07df",
+          "subnet-3036fb55"
+        ],
+        "availabilityZones": [
+          "ap-southeast-2a",
+          "ap-southeast-2b"
+        ],
+        "hostedZoneSubdomain": "dev",
+        "keyName": "bedev"
+      },
+      "wgtdev": {
+        "vpc": "vpc-fc739999",
+        "backendSubnets": [
+          "subnet-c17999b6",
+          "subnet-7d00fa18"
+        ],
+        "ccSubnets": [
+          "subnet-a17999d6",
+          "subnet-5b00fa3e"
+        ],
+        "frontendSubnets": [
+          "subnet-d37999a4",
+          "subnet-6000fa05"
+        ],
+        "availabilityZones": [
+          "ap-southeast-2a",
+          "ap-southeast-2b"
+        ],
+        "hostedZoneSubdomain": "wgtdev",
+        "keyName": "bedev"
+      },
+      "wgtint": {
+        "vpc": "vpc-fc739999",
+        "backendSubnets": [
+          "subnet-8f9c76f8",
+          "subnet-6727ea02"
+        ],
+        "backendElbSubnets": [
+          "subnet-8f9c76f8",
+          "subnet-6727ea02"
+        ],
+        "ccSubnets": [
+          "subnet-7a92780d",
+          "subnet-6f26eb0a"
+        ],
+        "frontendSubnets": [
+          "subnet-b09c76c7",
+          "subnet-b324e9d6"
+        ],
+        "availabilityZones": [
+          "ap-southeast-2a",
+          "ap-southeast-2b"
+        ],
+        "hostedZoneSubdomain": "int",
+        "keyName": "bedev"
+      },
+      "wgtuat": {
+        "vpc": "vpc-fc739999",
+        "backendSubnets": [
+          "subnet-189d776f",
+          "subnet-8e27eaeb"
+        ],
+        "backendElbSubnets": [
+          "subnet-189d776f",
+          "subnet-8e27eaeb"
+        ],
+        "ccSubnets": [
+          "subnet-efe20898",
+          "subnet-b836fbdd"
+        ],
+        "frontendSubnets": [
+          "subnet-519d7726",
+          "subnet-7a27ea1f"
+        ],
+        "availabilityZones": [
+          "ap-southeast-2a",
+          "ap-southeast-2b"
+        ],
+        "hostedZoneSubdomain": "uat",
+        "keyName": "bedev"
+      }
+    }
+  },
+  "Resources": {
+    "{{name}}ELB": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "Subnets": {
+          "Fn::FindInMap": [
+            "VpcMap",
+            {
+              "Ref": "environment"
+            },
+            "backendElbSubnets"
+          ]
+        },
+        "Scheme": "internal",
+        "HealthCheck": {
+          "Target": "HTTP:80/Diagnostic/AppRunning",
+          "Interval": "30",
+          "HealthyThreshold": "2",
+          "Timeout": "15",
+          "UnhealthyThreshold": "3"
+        },
+        "Listeners": [
+          {
+            "LoadBalancerPort": "80",
+            "InstancePort": "80",
+            "InstanceProtocol": "HTTP",
+            "Protocol": "HTTP"
+          }
+        ],
+        "SecurityGroups": [
+          {
+            "Ref": "ELBSecurityGroup"
+          }
+        ]
+      }
+    },
+    "{{name}}AutoScalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": {
+          "Fn::FindInMap": [
+            "VpcMap",
+            {
+              "Ref": "environment"
+            },
+            "availabilityZones"
+          ]
+        },
+        "VPCZoneIdentifier": {
+          "Fn::FindInMap": [
+            "VpcMap",
+            {
+              "Ref": "environment"
+            },
+            "backendSubnets"
+          ]
+        },
+        "HealthCheckGracePeriod": 600,
+        "HealthCheckType": "ELB",
+        "LaunchConfigurationName": {
+          "Ref": "{{name}}LaunchConfiguration"
+        },
+        "MinSize": 2,
+        "MaxSize": 2,
+        "LoadBalancerNames": [
+          {
+            "Ref": "{{name}}ELB"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "CloudFormationStack",
+            "Value": {
+              "Ref": "AWS::StackName"
+            },
+            "PropagateAtLaunch": true
+          },
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                " ",
+                [
+                  "Dalek",
+                  {
+                    "Ref": "environment"
+                  },
+                  "Marketing Admin Site"
+                ]
+              ]
+            },
+            "PropagateAtLaunch": true
+          },
+          {
+            "Key": "environment",
+            "Value": {
+              "Ref": "environment"
+            },
+            "PropagateAtLaunch": true
+          }
+        ]
+      },
+      "UpdatePolicy": {
+        "AutoScalingRollingUpdate": {
+          "MaxBatchSize": "2",
+          "MinInstancesInService": "1"
+        }
+      }
+    },
+    "{{name}}LaunchConfiguration": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "InstanceType": {
+          "Ref": "instanceType"
+        },
+        "ImageId": {
+          "Ref": "ami"
+        },
+        "SecurityGroups": [
+          {
+            "Ref": "InstanceSecurityGroup"
+          }
+        ],
+        "KeyName": {
+          "Fn::FindInMap": [
+            "VpcMap",
+            {
+              "Ref": "environment"
+            },
+            "keyName"
+          ]
+        },
+        "IamInstanceProfile": {
+          "Ref": "{{name}}Profile"
+        }
+      }
+    },
+    "{{name}}CNAME": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName": {
+          "Fn::Join": [
+            ".",
+            [
+              {
+                "Fn::FindInMap": [
+                  "VpcMap",
+                  {
+                    "Ref": "environment"
+                  },
+                  "hostedZoneSubdomain"
+                ]
+              },
+              "aws.beteasy.com.au."
+            ]
+          ]
+        },
+        "Comment": "DNS name for {{name}}.",
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "{{name}}",
+              {
+                "Fn::FindInMap": [
+                  "VpcMap",
+                  {
+                    "Ref": "environment"
+                  },
+                  "hostedZoneSubdomain"
+                ]
+              },
+              "aws.beteasy.com.au."
+            ]
+          ]
+        },
+        "Type": "CNAME",
+        "TTL": "60",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "{{name}}ELB",
+              "DNSName"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {}
+}

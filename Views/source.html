@@ -7,6 +7,12 @@
                     <input ng-model="fields.Name" class="form-control" placeholder="your objects name" required></input>
                 </div>
             </div>
+            <!--Object description-->
+            <div class="form-group" ng-class="{'has-warning':fields.Description==''}">
+                <div class="col-md-12 ">
+                    <input ng-model="fields.Description" class="form-control" placeholder="your objects description" required></input>
+                </div>
+            </div>
             <!-- JSON Textarea -->
             <div class="form-group" ng-class="{'has-warning':fields.JSON=='' || fields.JSON==null}">
                 <div class="col-md-12 ">

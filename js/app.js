@@ -5,7 +5,7 @@ app.run(function ($rootScope) {
     $rootScope.Keys = [];
     $rootScope.Headers = [];
 
-    $rootScope.fields = { Name: '', JSON: '' };
+    $rootScope.fields = { Name: '', JSON: '', Description: '' };
     $rootScope.TemplateData = {};
 
 
@@ -49,6 +49,10 @@ app.run(function ($rootScope) {
             return options.inverse(this);
         }
 
+    });
+
+    Handlebars.registerHelper('escape', function (variable) {
+        return variable.replace(/(['"])/g, '\\$1');
     });
 
 });

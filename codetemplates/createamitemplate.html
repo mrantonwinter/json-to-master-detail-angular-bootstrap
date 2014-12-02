@@ -1,0 +1,209 @@
+ .\aws-create-ami.ps1 -username Administrator -password Jenkins#11 -version 1
+
+
+param  (
+	[string]$applicationName="BetEasy.{{name}}",
+	[string]$username="",  #Don't check in your credentials
+	[string]$password="",  #Don't check in your credentials
+	[string]$environment="bedev",
+	[string]$imageid="ami-77b7de4d",
+	[int]$version=0,
+	[string]$s3Path="{{name}}",
+	[string]$s3BucketName="bedev-build-artefacts",
+	[string]$jenkinsJobName="BetEasy-{{name}}",
+	[string]$jenkinsUrl="http://jenkins.aws.beteasy.com.au:8080/"
+)
+
+import-module "C:\Program Files (x86)\AWS Tools\PowerShell\AWSPowerShell\AWSPowerShell.psd1"
+
+function AddEc2Tag {
+    param ($resourceId, $key, $value, $region)
+
+	$tag = New-Object Amazon.EC2.Model.Tag
+	$tag.Key = $key
+	$tag.Value = $value
+
+	$array = @($tag)
+
+	New-EC2Tag $resourceId -Tags $array -region $region
+}
+
+function LogMessage {
+    param ($message, $type = "message")
+
+    switch ($type.ToLower()){
+        "message" { $messageColor = "Green" }
+        "error"   { $messageColor = "Red" }
+        "warning" { $messageColor = "Yellow" }
+        "info"    { $messageColor = "Cyan" }
+    }
+
+    Write-Host -ForegroundColor $messageColor "`n==========================================="
+    Write-Host -ForegroundColor $messageColor $message
+    Write-Host -ForegroundColor $messageColor "===========================================`n"
+}
+
+function Get-Artefact {
+    param ($jenkinsUrl, $jenkinsJobName, $tempPath, $build, $applicationName, $buildArtifactName="", $s3BucketName, $s3Path)
+
+	$packageFileName = "$applicationName-1.0.$build.0.zip"
+
+    LogMessage "Latest deployment artefact is $packageFileName in the $s3BucketName" -type "info"
+
+    $packageFileLocal = $tempPath + "\$packageFileName"
+
+    if ($s3BucketName.length -gt 0) {
+	    $s3BucketKey = "$s3Path/$packageFileName"
+        LogMessage "Fetching from bucket $s3BucketName with key $s3BucketKey to $packageFileLocal with aws cli" -type "info"
+        $packageFile = Read-S3Object -BucketName $s3BucketName -Key $s3BucketKey -File $packageFileLocal -Region "ap-southeast-2"
+    }
+
+    LogMessage "Download Finished to $packageFileLocal"  -type "info"
+    return $packageFileLocal
+}
+
+$maxcount = 1
+$mincount = 1
+$subnetid = "subnet-52e20825"
+$securitygroup = "sg-5c16c739"
+$insttype = "m3.medium"
+$region = "ap-southeast-2"
+
+$tempPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+if ([string]::IsNullOrEmpty($tempPath)) {
+    $tempPath = $env:temp
+}
+
+$runResult = New-EC2Instance -ImageId $imageid -MaxCount 1 -MinCount 1 -InstanceType $insttype -subnetid $subnetid -securitygroupid $securitygroup -region $region
+
+$instanceId = $runResult.Instances[0].InstanceId
+
+$tryAgain = 1
+$exceptionCount = 0
+$ip = ""
+
+while ($tryagain -eq 1)
+{
+ try
+ {
+
+   sleep(5)
+   $describeresult = get-ec2instance $instanceid -region $region
+
+   $ip = $describeresult.instances[0].privateipaddress
+
+   if ($ip.length -gt 0)
+   {
+       $tryagain = 0
+   }
+  }
+  catch{
+      $exceptioncount = $exceptioncount + 1
+    if ($exceptioncount -eq 5) {
+        throw;
+    }
+  }
+}
+
+echo "adding instance tags"
+
+$now = get-date
+$expires = $now.adddays(2)
+
+addec2tag -resourceid $instanceid -key "application" -value $env:build_plan -region $region
+addec2tag -resourceid $instanceid -key "env" -value "business systems" -region $region
+addec2tag -resourceid $instanceid -key "Name" -value "creating ami $applicationName" -region $region
+
+echo "web ui server amazon instance ip: $ip"
+
+$status = ""
+# awaiting for instance to launch
+while ($status -ne "success")
+{
+ sleep(10)
+ $ping = new-object system.net.networkinformation.ping
+ $reply = $ping.send($ip)
+ $status = $reply.status
+}
+
+echo "able to ping instance ip: $ip"
+
+$webserveravailable = false
+
+$address = "https://" + $ip + ":8172/MsDeploy.axd"
+
+while (!$webServerAvailable)
+{
+	echo "Waiting for web server to become available"
+	$webServerAvailable = curl -ksi $address --connect-timeout 1 | grep HTTP
+	if (!$webServerAvailable)
+	{
+		#echo "Not Yet"
+    	sleep(3)
+	}
+}
+
+echo 'Instance Ready. Calling the Deployment Script'
+
+echo "artefact lives in $s3BucketName"
+
+# call the deployment script
+
+# Download package from s3 -s3BucketName $s3BucketName
+
+$packageName = "Marketing-1.0.$version.0.zip"
+
+if ($build -eq 0)
+{
+	$packageQueryUrl = "$jenkinsUrl/job/$jenkinsJobName/lastSuccessfulBuild/api/xml?depth=5&xpath=//number/text()"
+	$webclient = new-object System.Net.WebClient
+	$build = $webclient.DownloadString($packageQueryUrl)
+}
+
+$localFilePath = Get-Artefact $jenkinsUrl $jenkinsJobName $tempPath $version "Marketing" $packageName $s3BucketName $s3Path
+
+$localFileName = "$tempPath\Marketing.zip"
+
+Copy-Item -Path $localFilePath -Destination $localFileName -Force
+
+
+
+Write-Host "Local File Name $localFileName"
+
+Write-Host "Address $address"
+
+iex ".\Marketing.deploy.cmd /Y /M:$address /U:$username /P:$password /A:basic -allowUntrusted"
+
+$deployResult = $?
+if ($deployResult)
+{
+	$amiName = "$applicationName-1.0.$version.0".ToLower()
+	$AMIID = New-EC2Image -InstanceId $instanceId -Name $amiName -Description "$applicationName Microservice Version $build,$baseImageDesc" -region $region
+
+	echo "Creating image $AMIID from instance $InstanceId"
+
+	sleep(5)  # Do not call until aws has a little bit of time to add it
+	$AMI = Get-EC2Image $AMIID -region $region
+	While($AMI.ImageState -ne "available") {
+		$AMI = Get-EC2Image $AMIID -region $region
+		echo "Waiting for $AMIID to be available"
+		sleep(15)
+	}
+
+	$now = Get-Date
+
+	AddEc2Tag -resourceId $AMIID -key "application" -value $applicationName -region $region
+	AddEc2Tag -resourceId $AMIID -key "created_at" -value $now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") -region $region
+	AddEc2Tag -resourceId $AMIID -key "env" -value "bedev" -region $region
+
+	echo "Terminating EC2 Instance $InstanceId"
+
+	Stop-EC2Instance $InstanceId -Terminate -Force -region $region
+
+	exit 0
+}
+else
+{
+	exit 1
+}

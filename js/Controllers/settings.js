@@ -37,12 +37,15 @@
         //setup our data
         $rootScope.TemplateData = {
             name: $rootScope.fields.Name,
+            description: $rootScope.fields.Description,
             keys: _.pluck(columns, 'key'),
             headers: _.pluck(columns, 'humanised'),
             elements: columns,
-            allElements: $rootScope.Keys
+            allElements: $rootScope.Keys,
+            json: $rootScope.fields.JSON
         };
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

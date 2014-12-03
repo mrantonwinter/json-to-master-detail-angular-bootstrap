@@ -49,6 +49,16 @@
         {{/each}}
 
 
+        <div class="col-md-10 col-md-push-2 BE padding vertical bottomlarge topsmall">
+            <button class="btn btn-sm btn-success BE widebutton" ng-disabled="Selected==null  || Edit==true" ng-click="Edit{{name}}()">Edit</button>
+
+            <button class="btn btn-sm btn-info BE spacehorizontal" ng-disabled="Selected.{{name}}ID==-1 || Edit==true" ng-click="New{{name}}()">New</button>
+            <button class="btn btn-sm btn-info" ng-disabled="Selected==null || Selected.{{name}}ID==-1 || Edit==true" ng-click="Copy{{name}}()">Copy</button>
+            <button class="btn btn-sm btn-danger BE spacehorizontal" ng-disabled="Selected==null" ng-click="Delete{{name}}()">Delete</button>
+
+            <button class="btn btn-sm btn-warning BE spacehorizontal" ng-disabled="Selected==null || Selected.{{name}}ID==-1 || Edit==false" ng-click="Reset{{name}}()">Cancel</button>
+            <button class="btn btn-sm btn-success BE extrawidebutton spacehorizontal" ng-disabled="Selected==null || Edit==false" ng-click="Save{{name}}()">Save</button>
+        </div>
 
     </fieldset>
 </form>

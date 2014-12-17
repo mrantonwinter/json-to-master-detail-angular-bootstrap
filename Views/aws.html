@@ -1,8 +1,8 @@
 ﻿<div ng-controller="aws" ng-show="Go">
     <hr />
-    <h2>AWS <button class="btn btn-link" ng-click="ShowAWS=!ShowAWS"><span ng-show ="ShowAWS">Hide</span><span ng-hide="ShowAWS">Show</span></button></h2>
+    <h2>AWS <button class="btn btn-link" ng-click="Show.AWS=!Show.AWS"><span ng-show ="Show.AWS">Hide</span><span ng-hide="Show.AWS">Show</span></button></h2>
     <hr />
-    <div ng-show="ShowAWS">
+    <div ng-show="Show.AWS">
         <h4>Cloud formation</h4>
         <pre>{{CloudFormationTemplate}}</pre>
         <hr />

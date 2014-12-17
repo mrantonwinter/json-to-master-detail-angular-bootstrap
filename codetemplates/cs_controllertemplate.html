@@ -1,0 +1,64 @@
+﻿public class {{name}}Controller : ApiController
+{
+    protected I{{name}}Service BusinessLayer { get; set; }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Constructor, dependencies are injected in
+    /// </summary>
+    /// <param name="businessLayer"></param>
+    public {{name}}Controller(I{{name}}Service businessLayer)
+    {
+        this.BusinessLayer = businessLayer;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //  CRUD for {{name}}
+
+    /// <summary>
+    /// Create
+    /// </summary>
+    /// <param name="{{lowercasename}}"></param>
+    /// <returns></returns>
+    [HttpPost, Route("api/{{name}}")]
+    public decimal Insert{{name}}({{name}} {{lowercasename}})
+    {
+        return BusinessLayer.Insert{{name}}({{lowercasename}});
+    }
+
+    /// <summary>
+    /// Read
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet, Route("api/{{name}}")]
+    public IEnumerable<{{name}}>Get{{name}}()
+    {
+        return BusinessLayer.Get{{name}}();
+    }
+
+    /// <summary>
+    /// update
+    /// </summary>
+    /// <param name="{{lowercasename}}"></param>
+    [HttpPut, Route("api/{{name}}")]
+    public void Put{{name}}({{name}} {{lowercasename}})
+    {
+        BusinessLayer.Update{{name}}({{lowercasename}});
+    }
+
+    /// <summary>
+    /// Delete
+    ///</summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete, Route("api/{{name}}/{id}")]
+    public {{name}}DeleteResult Delete{{name}}(int id)
+    {
+        return BusinessLayer.Delete{{name}}(id);
+    }
+
+}
+
+

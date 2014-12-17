@@ -1,0 +1,31 @@
+﻿public class {{name}}Service : I{{name}}Service
+{
+    I{{name}}Repository Repository { get; set; }
+
+    public {{name}}Service(I{{name}}Repository repository)
+    {
+        this.Repository = repository;
+    }
+
+    public IEnumerable<{{name}}>Get{{name}}()
+    {
+        return Repository.Get{{name}}();
+    }
+
+    public {{name}}DeleteResult Delete{{name}}(int id)
+    {
+        return Repository.Delete{{name}}(id);
+    }
+
+    public int Insert{{name}}({{name}} {{lowercasename}})
+    {
+        return Repository.Insert{{name}}({{lowercasename}});
+    }
+
+
+    public int Update{{name}}({{name}} {{lowercasename}})
+    {
+        return Repository.Update{{name}}({{lowercasename}});
+    }
+
+}

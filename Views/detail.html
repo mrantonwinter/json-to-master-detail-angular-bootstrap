@@ -1,9 +1,12 @@
 ﻿<div ng-controller="detail" ng-show="Go">
-    <hr />
-    <h2>Detail preview </h2>
-    <div id="detailpreview"></div>
-    <hr />
-    <h2>Detail code </h2>
-    <h4>Detail HTML</h4>
-    <pre>{{HTML}}</pre>
+    <div ng-show="fields.ShowClient">
+
+        <hr />
+        <h2>Detail preview </h2>
+        <div id="detailpreview"></div>
+        <hr />
+        <h2>Detail code </h2>
+        <h4>Detail HTML</h4>
+        <pre>{{HTML}}</pre>
+    </div>
 </div>

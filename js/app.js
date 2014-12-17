@@ -8,6 +8,9 @@ app.run(function ($rootScope) {
     $rootScope.fields = { Name: '', LowerCaseName:'', JSON: '', Description: '' };
     $rootScope.TemplateData = {};
 
+    $rootScope.fields.ShowClient = false;
+    $rootScope.ShowWebAPI = false;
+    $rootScope.ShowAWS = false;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 

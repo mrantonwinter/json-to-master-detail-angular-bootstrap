@@ -1,12 +1,16 @@
 ﻿<div ng-controller="webapi" ng-show="Go">
     <hr />
-    <h2>IRepository</h2>
-    <pre>{{IRepository}}</pre>
+    <h2>WebAPI <button class="btn btn-link" ng-click="ShowWebAPI=!ShowWebAPI"><span ng-show="ShowWebAPI">Hide</span><span ng-hide="ShowWebAPI">Show</span></button></h2>
     <hr />
-    <h2>Repository</h2>
-    <pre>{{Repository}}</pre>
-    <hr />
-    <h2>C# Service</h2>
-    <pre>{{CSService}}</pre>
-    <hr />
+    <div ng-show="ShowWebAPI">
+        <h2>IRepository</h2>
+        <pre>{{IRepository}}</pre>
+        <hr />
+        <h2>Repository</h2>
+        <pre>{{Repository}}</pre>
+        <hr />
+        <h2>C# Service</h2>
+        <pre>{{CSService}}</pre>
+        <hr />
+    </div>
 </div>

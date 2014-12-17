@@ -1,10 +1,12 @@
 ﻿<div ng-controller="aws" ng-show="Go">
     <hr />
-    <h2>AWS</h2>
+    <h2>AWS <button class="btn btn-link" ng-click="ShowAWS=!ShowAWS"><span ng-show ="ShowAWS">Hide</span><span ng-hide="ShowAWS">Show</span></button></h2>
     <hr />
-    <h4>Cloud formation</h4>
-    <pre>{{CloudFormationTemplate}}</pre>
-    <hr />
-    <h4>AMI Create</h4>
-    <pre>{{CreateAMITemplate}}</pre>
+    <div ng-show="ShowAWS">
+        <h4>Cloud formation</h4>
+        <pre>{{CloudFormationTemplate}}</pre>
+        <hr />
+        <h4>AMI Create</h4>
+        <pre>{{CreateAMITemplate}}</pre>
+    </div>
 </div>

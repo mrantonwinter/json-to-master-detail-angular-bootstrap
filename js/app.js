@@ -5,7 +5,7 @@ app.run(function ($rootScope) {
     $rootScope.Keys = [];
     $rootScope.Headers = [];
 
-    $rootScope.fields = { Name: '', JSON: '', Description: '' };
+    $rootScope.fields = { Name: '', LowerCaseName:'', JSON: '', Description: '' };
     $rootScope.TemplateData = {};
 
 

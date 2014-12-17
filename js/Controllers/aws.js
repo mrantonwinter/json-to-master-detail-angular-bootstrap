@@ -17,14 +17,14 @@ app.controller("aws", function ($scope, $rootScope, TemplateService) {
     // templates
 
     function CreateCloudFormationTemplate() {
-        TemplateService.LoadAndRender('cloudformationtemplate.html', $rootScope.TemplateData)
+        TemplateService.LoadAndRender('cloudformationtemplate.html', $rootScope.TemplateData, true)
         .then(function (data) {
             $scope.CloudFormationTemplate = data;
         });
     };
 
     function CreateCreateAMI() {
-        TemplateService.LoadAndRender('createamitemplate.html', $rootScope.TemplateData)
+        TemplateService.LoadAndRender('createamitemplate.html', $rootScope.TemplateData, true)
         .then(function (data) {
             $scope.CreateAMITemplate = data;
         });

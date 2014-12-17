@@ -21,8 +21,10 @@ app.controller('{{name}}Controller', function ($scope, $rootScope, {{name}}Servi
 
     //called when a row is selected
     $scope.Select = function (selected) {
-        $scope.Edit = false;
-        //clone our object in case we need to revert it
+        if ($scope.Edit) {
+            ModalService.Message("Warning!", "You cannot change your selection while editing");
+            return;
+        }        //clone our object in case we need to revert it
         Original = RuntimeFrameworkService.Clone(selected);
 
         $scope.Selected = selected;

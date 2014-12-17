@@ -1,0 +1,15 @@
+﻿
+<div class="container-fluid BE tabcontainer" ng-controller="{{name}}Controller">
+    <div class="row">
+        <!--master-->
+        <div class="col-lg-6">
+            <div ng-include src='"Angular/Views/PromotionsAdmin/{{name}}Tab/{{name}}Table.html"'></div>
+        </div>
+
+        <!--detail-->
+        <div class="col-lg-6">
+            <div ng-include src='"Angular/Views/PromotionsAdmin/{{name}}Tab/{{name}}Detail.html"'></div>
+        </div>
+    </div>
+</div>
+

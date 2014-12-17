@@ -1,0 +1,56 @@
+﻿
+public class {{name}}Repository : I{{name}}Repository
+{
+    TBSAdminEntities dbContext = new TBSAdminEntities();
+    I{{name}}Dal _{{lowercasename}}Dal;
+
+    protected const int BatchSize = 10000;
+    protected string TbsConnectionString = ConfigurationManager.ConnectionStrings["TBSConnection"].ConnectionString;
+    protected string TbsAdminConnectionString = ConfigurationManager.ConnectionStrings["TBSAdminConnection"].ConnectionString;
+    protected string DestinationTableName = "PromoEligibleClient";
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    // automapper setup
+
+    public {{name}}Repository(I{{name}}Dal _{{lowercasename}}Dal)
+    {
+        AutoMapper.Mapper.CreateMap<{{name}}List_Result, {{name}}>();
+        AutoMapper.Mapper.CreateMap<{{name}}Update_Result, {{name}}UpdateResult>();
+        AutoMapper.Mapper.CreateMap<{{name}}Delete_Result, {{name}}DeleteResult>();
+
+        this._{{lowercasename}}Dal = _{{lowercasename}}Dal;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    // CRUD functions for {{name}} 
+
+    public IEnumerable<{{name}}>Get{{name}}()
+    {
+        return dbContext.{{name}}List().Map<{{lowercasename}}List_Result, {{name}}>();
+    }
+
+    public {{name}}UpdateResult Update{{name}}({{name}} {{lowercasename}})
+    {
+        return dbContext.{{name}}Update(
+            {{#keys}}
+            {{../lowercasename}}.{{this}},
+            {{/keys}}
+        ).Map<{{name}}Update_Result, {{name}}UpdateResult>().FirstOrDefault();
+    }
+
+    public int Insert{{name}}({{name}} {{lowercasename}})
+    {
+        var Result = dbContext.{{name}}Insert(
+            {{#keys}}
+            {{../lowercasename}}.{{this}},
+            {{/keys}}
+        );
+
+        return Result.Select(x => x.{{name}}ID).FirstOrDefault().Value;
+    }
+
+    public {{name}}DeleteResult Delete{{name}}(int id)
+    {
+        return dbContext.{{name}}Delete(id).Map<{{name}}Delete_Result, {{name}}DeleteResult>().FirstOrDefault();
+    }
+}

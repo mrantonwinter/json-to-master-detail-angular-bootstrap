@@ -13,7 +13,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     function CreateHTML() {
-        TemplateService.LoadAndRender('detailtemplate.html', $rootScope.TemplateData)
+        TemplateService.LoadAndRender('detailtemplate.html', $rootScope.TemplateData, true)
         .then(function (data) {
             $scope.HTML = data;
             CreatePreview();

@@ -31,12 +31,14 @@
     };
 
     function SetupTemplateData() {
+
         //get the list of columns for our master table 
         var columns = _.where($rootScope.Keys, { inmaster: true });
 
         //setup our data
         $rootScope.TemplateData = {
             name: $rootScope.fields.Name,
+            lowercasename: $rootScope.fields.Name.toLowerCase(),
             description: $rootScope.fields.Description,
             keys: _.pluck(columns, 'key'),
             headers: _.pluck(columns, 'humanised'),

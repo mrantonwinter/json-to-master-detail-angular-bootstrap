@@ -2,6 +2,7 @@
 
     $scope.IRepository = "";
     $scope.Repository = "";
+    $scope.CSIService = "";
     $scope.CSService = "";
     $scope.CSController = "";
 
@@ -12,6 +13,7 @@
     $rootScope.$on('Process', function () {
         CreateIRepository();
         CreateRepository();
+        CreateIService();
         CreateService();
         CreateController();
     });
@@ -30,6 +32,10 @@
         .then(function (data) { $scope.Repository = data; });
     }
 
+    function CreateIService() {
+        TemplateService.LoadAndRender('cs_iservicetemplate.html', $rootScope.TemplateData, false)
+        .then(function (data) { $scope.CSIService = data; });
+    }
     function CreateService() {
         TemplateService.LoadAndRender('cs_servicetemplate.html', $rootScope.TemplateData, false)
         .then(function (data) { $scope.CSService = data; });

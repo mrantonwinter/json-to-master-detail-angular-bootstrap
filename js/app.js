@@ -19,6 +19,9 @@ app.run(function ($rootScope) {
         AWS: false
     };
 
+
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
@@ -66,3 +69,6 @@ app.run(function ($rootScope) {
     });
 
 });
+
+
+

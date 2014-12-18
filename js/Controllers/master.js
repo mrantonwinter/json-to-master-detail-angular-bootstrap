@@ -15,6 +15,9 @@
         CreateLayoutHTML();
         CreateController();
         CreateService();
+
+
+
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +39,7 @@
     //preview our master table view
     function CreatePreview() {
         //add some dummy data
-        
+
         $scope.Model[$rootScope.fields.Name] = { rows: [] };
         for (var i = 0; i < 5; i++)
             $scope.Model[$rootScope.fields.Name].rows.push(JSON.parse($rootScope.fields.JSON));

@@ -27,6 +27,11 @@
     $scope.Process = function () {
         SetupTemplateData();
 
+        //use jquery to allow our code to be selectable
+        $('pre').prop('title', 'click to select');
+        $('pre').on('click', function () { SelectText(this) });
+
+
         $rootScope.$broadcast('Process');
     };
 

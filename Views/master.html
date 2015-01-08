@@ -1,8 +1,8 @@
 ﻿<div ng-controller="master" ng-show="Go">
     <hr />
-    <h2>HTML Client <button class="btn " ng-click="Show.Client=!Show.Client"><span ng-show="Show.Client">Hide</span><span ng-hide="Show.Client">Show</span></button></h2>
+    <h2>HTML Client <button class="btn " ng-click="$root.Show.Client=!$root.Show.Client"><span ng-show="$root.Show.Client">Hide</span><span ng-hide="$root.Show.Client">Show</span></button></h2>
     <hr />
-    <div ng-show="Show.Client">
+    <div ng-show="$root.Show.Client">
 
         <h2>Layout HTML </h2>
         <pre>{{LayoutHTML}}</pre>

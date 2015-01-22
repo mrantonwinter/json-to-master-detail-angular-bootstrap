@@ -19,6 +19,30 @@
                     <textarea ng-model="fields.JSON" class="form-control MD resizevertical" id="jsoninput" name="jsoninput" rows="10" placeholder="paste JSON here" required></textarea>
                 </div>
             </div>
+            <!--solution name-->
+            <div class="form-group" ng-class="{'has-warning':fields.SolutionName==''}">
+                <div class="col-md-12 ">
+                    <input ng-model="fields.SolutionName" class="form-control" placeholder="your solutions name ( example TBS.Betting.API )" required>
+                </div>
+            </div>
+            <!--major version-->
+            <div class="form-group" ng-class="{'has-warning':fields.MajorVersion==''}">
+                <div class="col-md-12 ">
+                    <input ng-model="fields.MajorVersion" class="form-control" placeholder="major version number" required>
+                </div>
+            </div>
+            <!--minor version-->
+            <div class="form-group" ng-class="{'has-warning':fields.MinorVersion==''}">
+                <div class="col-md-12 ">
+                    <input ng-model="fields.MinorVersion" class="form-control" placeholder="minor version number" required>
+                </div>
+            </div>
+            <!--patch number-->
+            <div class="form-group" ng-class="{'has-warning':fields.PatchNumber==''}">
+                <div class="col-md-12 ">
+                    <input ng-model="fields.PatchNumber" class="form-control" placeholder="patch number" required>
+                </div>
+            </div>
             <!-- Go Button -->
             <div class="form-group">
                 <div class="col-md-12 ">

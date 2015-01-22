@@ -1,0 +1,44 @@
+﻿include ".\buildsystem\Build.Common.ps1"
+
+properties {
+    $mainproject = "{{solutionname}}"
+    $majorversion = "{{majorversion}}"
+    $minorversion = "{{minorversion}}"
+    $patchnumber = "{{patchnumber}}"
+    $s3BucketName = "bedev-build-artefacts"
+}
+
+task Clean {
+    Log-Message "Cleaning the project..."
+    Clean-Dirs
+}
+
+task Assembly-Info {
+    Log-Message "Updating AssemblyInfo"
+    Update-Assembly-Info
+}
+
+task Compile -depends Clean, Assembly-Info {
+    Log-Message "Compiling $solution ..."
+    Write-Host ("Build Configuration: $buildConfiguration")
+    Compile-Solution -solution $solution -buildConfiguration $buildConfiguration
+}
+
+task Test -depends Compile {
+    Run-Test "Unit"
+}
+
+task Package -depends Test {
+    Log-Message "Packaging $mainproject ..."
+
+    Package-Project -solution $solution -packageDir $packageDir -version $version
+}
+
+task Update-Build-System {
+    Update-Build-System
+}
+
+task CI -depends Package {
+    Publish-Project  -project $mainproject -packageDir $packageDir -version $version -s3BucketName $s3BucketName
+}
+

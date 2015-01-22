@@ -9,14 +9,19 @@ app.run(function ($rootScope) {
         Name: '',
         LowerCaseName: '',
         JSON: '',
-        Description: ''
+        Description: '',
+        SolutionName: '',
+        MajorVersion: '',
+        MinorVersion: '',
+        PatchNumber:''
     };
     $rootScope.TemplateData = {};
 
     $rootScope.Show = {
         Client: false,
         WebAPI: false,
-        AWS: false
+        AWS: false,
+        Powershell:false
     };
 
 

@@ -1,0 +1,18 @@
+﻿param(
+    $task = @("Clean", "Compile", "Package"),
+    $verbose = "" # q[uiet], m[inimal], n[ormal], and diag[nostic].
+)
+
+$rootDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+Import-Module $rootDir\buildsystem\lib\psake\psake.psm1 -force
+
+Invoke-Psake .\Build.{{solutionname}}.Tasks.ps1 -tasklist $task `
+    -parameters @{
+        "rootDir" = $rootDir;
+        "verbose" = $verbose;
+        "buildDir" = "$rootDir\build"
+        "packageDir" = "$rootDir\build\package";
+        "tmpDir" = "$rootDir\tmp";
+        "solution" = "$rootDir\{{solutionname}}.sln";
+        "buildConfiguration" = "Release"
+    }

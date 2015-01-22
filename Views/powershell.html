@@ -1,0 +1,12 @@
+﻿<div ng-controller="powershell" ng-show="Go">
+    <hr />
+    <h2>Powershell <button class="btn btn-link" ng-click="Show.Powershell=!Show.Powershell"><span ng-show="Show.Powershell">Hide</span><span ng-hide="Show.Powershell">Show</span></button></h2>
+    <hr />
+    <div ng-show="Show.Powershell">
+        <h4>Powershell build</h4>
+        <pre>{{BuildTemplate}}</pre>
+        <hr />
+        <h4>Powershell build tasks</h4>
+        <pre>{{BuildTasksTemplate}}</pre>
+    </div>
+</div>

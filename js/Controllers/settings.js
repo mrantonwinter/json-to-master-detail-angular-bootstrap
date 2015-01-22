@@ -43,6 +43,10 @@
         //setup our data
         $rootScope.TemplateData = {
             name: $rootScope.fields.Name,
+            solutionname: $rootScope.fields.SolutionName,
+            majorversion: $rootScope.fields.MajorVersion,
+            minorversion: $rootScope.fields.MinorVersion,
+            patchnumber: $rootScope.fields.PatchNumber,
             lowercasename: $rootScope.fields.Name.toLowerCase(),
             description: $rootScope.fields.Description,
             keys: _.pluck(columns, 'key'),

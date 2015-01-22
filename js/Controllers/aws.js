@@ -5,6 +5,7 @@ app.controller("aws", function ($scope, $rootScope, TemplateService) {
     $scope.CloudFormationTemplate = "";
     $scope.CreateAMITemplate = "";
 
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // main entry point
 

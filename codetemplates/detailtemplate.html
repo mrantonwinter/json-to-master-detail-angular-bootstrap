@@ -10,21 +10,21 @@
                 {{/compare}}
 
                 {{#compare this.type "input"}}
-                <input id="{{this.humanised}}inputinput" type="text" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}">
+                <input id="{{this.humanised}}inputinput" type="text" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}" ng-disabled="Edit==false">
                 {{/compare}}
 
                 {{#compare this.type "email"}}
-                <input id="{{this.humanised}}emailinput" type="email" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}">
+                <input id="{{this.humanised}}emailinput" type="email" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}" ng-disabled="Edit==false">
                 {{/compare}}
 
                 {{#compare this.type "textarea"}}
-                <textarea id="{{this.humanised}}textareainput" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}" />
+                <textarea id="{{this.humanised}}textareainput" placeholder="{{this.humanised}}" class="form-control input-md" ng-model="Selected.{{this.key}}" ng-disabled="Edit==false" />
                 {{/compare}}
 
                 {{#compare this.type "checkbox"}}
                 <div class="checkbox">
                     <label>
-                        <input id="{{this.humanised}}checkboxinput" type="checkbox" ng-model="Selected.{{this.key}}">
+                        <input id="{{this.humanised}}checkboxinput" type="checkbox" ng-model="Selected.{{this.key}}" ng-disabled="Edit==false">
                     </label>
                 </div>
                 {{/compare}}
@@ -39,7 +39,7 @@
                 {{/compare}}
 
                 {{#compare this.type "select"}}
-                <select id="{{this.humanised}}selectinput" class="form-control " ng-model="Selected.{{this.key}}"></select>
+                <select id="{{this.humanised}}selectinput" class="form-control " ng-model="Selected.{{this.key}}" ng-disabled="Edit==false"></select>
                 {{/compare}}
 
 
@@ -49,15 +49,23 @@
         {{/each}}
 
 
-        <div class="col-md-10 col-md-push-2 BE padding vertical bottomlarge topsmall">
-            <button class="btn btn-sm btn-success BE widebutton" ng-disabled="Selected==null  || Edit==true" ng-click="Edit{{name}}()">Edit</button>
-
-            <button class="btn btn-sm btn-info BE spacehorizontal" ng-disabled="Selected.{{name}}ID==-1 || Edit==true" ng-click="New{{name}}()">New</button>
-            <button class="btn btn-sm btn-info" ng-disabled="Selected==null || Selected.{{name}}ID==-1 || Edit==true" ng-click="Copy{{name}}()">Copy</button>
-            <button class="btn btn-sm btn-danger BE spacehorizontal" ng-disabled="Selected==null" ng-click="Delete{{name}}()">Delete</button>
-
-            <button class="btn btn-sm btn-warning BE spacehorizontal" ng-disabled="Selected==null || Selected.{{name}}ID==-1 || Edit==false" ng-click="Reset{{name}}()">Cancel</button>
-            <button class="btn btn-sm btn-success BE extrawidebutton spacehorizontal" ng-disabled="Selected==null || Edit==false" ng-click="Save{{name}}()">Save</button>
+        <div class="col-xs-9 col-md-offset-3">
+            <div class="btn-toolbar ">
+                <div class="btn-group ">
+                    <button class="btn btn-sm btn-success " ng-disabled="Selected==null  || Edit==true" ng-click="Edit{{name}}">Edit</button>
+                </div>
+                <div class="btn-group ">
+                    <button class="btn btn-sm  btn-info" ng-disabled="Selected.{{name}}ID==-1 || Edit==true" ng-click="New{{name}}()">New</button>
+                    <button class="btn btn-sm btn-primary " ng-disabled="Selected==null || Selected.{{name}}ID==-1 || Edit==true" ng-click="Copy{{name}}()">Copy</button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-danger " ng-disabled="Selected==null" ng-click="Delete()">Delete</button>
+                    <button class="btn btn-sm btn-warning " ng-disabled="Selected==null || Selected.{{name}}ID==-1 || Edit==false" ng-click="Reset{{name}}()">Cancel</button>
+                </div>
+                <div class="btn-group ">
+                    <button class="btn btn-sm btn-success " ng-disabled="Selected==null || Edit==false" ng-click="Save{{name}}()">Save</button>
+                </div>
+            </div>
         </div>
 
     </fieldset>

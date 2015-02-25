@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="row in Model.{{name}}.rows" ng-class="{info: row==Selected}" ng-click="Select(row)">
+            <tr ng-repeat="row in filtered = (Model.{{name}}.rows | filter:SearchText) | offset:(currentPage-1)*rowsPerPage | limitTo:rowsPerPage track by $index" ng-class="{info: row==Selected}" ng-click="Select(row)">
                 {{#each keys}}
                 <td>\{{ row.{{this}} }}</td>
                 {{/each}}
